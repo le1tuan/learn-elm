@@ -1,6 +1,6 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, h1, img, input, Attribute)
+import Html exposing (Html, text, div, h1, img, input, Attribute, li, ul)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 
@@ -10,25 +10,40 @@ main =
 
 
 type alias Model = {
-    content: String
+    todo: List String,
+    finish: List String,
+    inprogress: List String
 }
 
-model : Model
+model: Model
 model = {
-    content = "" }
+    todo = [],
+    finish = [],
+    inprogress = []}
 
-type Msg = Change String
+type Msg = TODO String| FINISH String| INPROGRESS String
 
 update: Msg -> Model -> Model
 update msg model = 
     case msg of 
-        Change newContent -> {
-            model | content = newContent
-        }
+        TODO item -> { model | todo = model.todo ++ [item]}
+        FINISH item -> model
+        INPROGRESS item -> model
 
-view: Model -> Html Msg
+view : Model -> Html Msg
 view model = 
     div []
-    [ input [ placeholder "Text to reverse", onInput Change ] []
-    , div [] [ text (String.reverse model.content) ]
+    [ input [placeholder "Todo", onInput TODO] []
+    , div [] (renderTodos model.todo)
     ]
+
+renderTodo modelTodo = 
+    let 
+        children = 
+        [
+            li [] [text modelTodo]
+        ]
+    in 
+        ul [] children
+
+renderTodos todo = List.map renderTodo todo
