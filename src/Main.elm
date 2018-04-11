@@ -1,8 +1,8 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, h1, img, input, Attribute, li, ul)
+import Html exposing (Html, text, div, h1, img, input, Attribute, li, ul, button)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onInput, onClick)
 
 
 main =
@@ -10,6 +10,7 @@ main =
 
 
 type alias Model = {
+    todoInput: String,
     todo: List String,
     finish: List String,
     inprogress: List String
@@ -19,21 +20,24 @@ model: Model
 model = {
     todo = [],
     finish = [],
-    inprogress = []}
+    inprogress = [],
+    todoInput = ""}
 
-type Msg = TODO String| FINISH String| INPROGRESS String
+type Msg = ADDTODO | TODO String| FINISH String| INPROGRESS String
 
 update: Msg -> Model -> Model
 update msg model = 
     case msg of 
-        TODO item -> { model | todo = model.todo ++ [item]}
+        TODO item -> { model | todoInput = item}
         FINISH item -> model
         INPROGRESS item -> model
+        ADDTODO -> { model | todo = model.todo ++ [model.todoInput] , todoInput = "" }
 
 view : Model -> Html Msg
 view model = 
     div []
     [ input [placeholder "Todo", onInput TODO] []
+    , button [onClick ADDTODO] [text "add todo"]
     , div [] (renderTodos model.todo)
     ]
 
