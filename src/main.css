@@ -13,3 +13,32 @@ img {
   margin: 20px 0;
   max-width: 200px;
 }
+
+input, button {
+  border: 1px solid black;
+  padding: 20px 0px;
+}
+button {
+  border-radius: 10px;
+  padding: 10px 0px;
+  margin-top: 10px;
+}
+li {
+  text-align: left;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-basis: 30.33%;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  margin: 0 10px;
+}

@@ -10,6 +10,8 @@ main =
 
 
 type alias Model = {
+    finishInput: String,
+    inprogressInput: String,
     todoInput: String,
     todo: List String,
     finish: List String,
@@ -21,25 +23,42 @@ model = {
     todo = [],
     finish = [],
     inprogress = [],
-    todoInput = ""}
+    todoInput = "",
+    finishInput = "",
+    inprogressInput = ""}
 
-type Msg = ADDTODO | TODO String| FINISH String| INPROGRESS String
+type Msg = ADDTODO | ADDFINISH | ADDINPROGRESS | TODO String| FINISH String| INPROGRESS String
 
 update: Msg -> Model -> Model
 update msg model = 
     case msg of 
         TODO item -> { model | todoInput = item}
-        FINISH item -> model
-        INPROGRESS item -> model
+        FINISH item -> {model | finishInput = item}
+        INPROGRESS item -> {model | inprogressInput = item}
         ADDTODO -> { model | todo = model.todo ++ [model.todoInput] , todoInput = "" }
-
+        ADDFINISH -> { model | finish = model.finish ++ [model.finishInput], finishInput = ""}
+        ADDINPROGRESS -> { model | inprogress = model.inprogress ++ [model.inprogressInput], inprogressInput = ""}
+        
 view : Model -> Html Msg
 view model = 
-    div []
-    [ input [placeholder "Todo", onInput TODO] []
-    , button [onClick ADDTODO] [text "add todo"]
-    , div [] (renderTodos model.todo)
+    div [class "container"] [
+        div [class "item"]
+        [ input [placeholder "Todo", onInput TODO] []
+        , button [onClick ADDTODO] [text "add todo"]
+        , div [] (renderTodos model.todo)
+        ],
+        div [class "item"]
+        [ input [placeholder "Inprogress", onInput INPROGRESS] []
+        , button [onClick ADDINPROGRESS] [text "add inprogress"]
+        , div [] (renderTodos model.inprogress)
+        ],
+        div [class "item"]
+        [ input [placeholder "finish", onInput FINISH] []
+        , button [onClick ADDFINISH] [text "add finish"]
+        , div [] (renderTodos model.finish)
+        ]
     ]
+    
 
 renderTodo modelTodo = 
     let 
